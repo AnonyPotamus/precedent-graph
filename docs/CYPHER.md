@@ -203,6 +203,16 @@ WHERE p.id <> $j   // FalkorDB can match the same edge twice in this pattern; ex
 RETURN p.name, count(c) AS shared ORDER BY shared DESC LIMIT 5
 ```
 
+**Corpus-wide treatment search** (`treatment_search`), for example every judgment held *per incuriam*, and by which bench:
+
+```cypher
+MATCH (s:Case)-[e:CITES]->(c:Case)
+WHERE toLower(e.treatment) CONTAINS $t
+  AND ($mb IS NULL OR s.bench_size >= $mb) AND ($yf IS NULL OR s.year >= $yf)
+RETURN c.key, c.short, c.scr, c.bench_size, s.key, s.short, s.scr, s.date, s.bench_size, e.treatment, left(e.context, 400)
+ORDER BY s.date DESC LIMIT $lim
+```
+
 **Read-only Cypher escape hatch** (`run_cypher`): the agent may write its own read query. Write keywords are rejected before execution, and the query runs with `GRAPH.RO_QUERY`.
 
 ## 6. Keeping the deployment in sync

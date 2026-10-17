@@ -397,8 +397,48 @@ Algorithms: algo.pageRank, algo.SPpaths, algo.BFS, algo.WCC, algo.labelPropagati
 WRITE_RE = re.compile(r"\b(CREATE|MERGE|SET|DELETE|REMOVE|DROP|DETACH|LOAD\s+CSV)\b|createNodeIndex", re.I)
 
 
+KEY_RE = re.compile(r"^(SCR|SCC|AIR|INSC):")
+
+
+def _graph_from_rows(rows, max_nodes=40):
+    """Best-effort evidence graph for free-form query results: any case keys (or Case nodes) in a row become
+    nodes; a row with exactly two cases becomes an edge, labelled by a treatment/polarity column if present."""
+    ev, seen = Evidence(), []
+    pairs = []
+    for r in rows:
+        keys = []
+        for v in r.values():
+            if isinstance(v, str) and KEY_RE.match(v):
+                keys.append(v)
+            elif hasattr(v, "properties") and isinstance(getattr(v, "properties", None), dict) and KEY_RE.match(str(v.properties.get("key", ""))):
+                keys.append(v.properties["key"])
+        for k in keys:
+            if k not in seen:
+                seen.append(k)
+        if len(keys) == 2:
+            lab = next((str(v) for c, v in r.items() if "treat" in c.lower() and isinstance(v, str)), "cites")
+            pol = next((str(v) for c, v in r.items() if "polar" in c.lower() and isinstance(v, str)),
+                       POLARITY_OF.get(lab.lower(), "NEUTRAL"))
+            pairs.append((keys[0], keys[1], lab, pol))
+    seen = seen[:max_nodes]
+    if not seen:
+        return None
+    for c in ro(f"MATCH (c:Case) WHERE c.key IN $ks RETURN {CASE_FIELDS}", {"ks": seen}):
+        ev.node(c)
+    for a, b, lab, pol in pairs:
+        if a in ev.nodes and b in ev.nodes:
+            ev.edge(a, b, lab, pol)
+    return ev.dump()
+
+
+POLARITY_OF = {"overruled": "NEGATIVE", "per incuriam": "NEGATIVE", "held per incuriam": "NEGATIVE", "not good law": "NEGATIVE",
+               "partly overruled": "PARTIAL", "doubted": "CAUTION", "not followed": "CAUTION", "disapproved": "CAUTION",
+               "relied on": "POSITIVE", "followed": "POSITIVE", "approved": "POSITIVE", "distinguished": "DISTINGUISHED"}
+
+
 def run_cypher(query):
-    """Run a READ-ONLY Cypher query for questions the other tools don't cover. Max 50 rows."""
+    """Run a READ-ONLY Cypher query for questions the other tools don't cover. Max 50 rows.
+    Return case keys (c.key) in the results so the UI can draw them."""
     if WRITE_RE.search(query):
         return {"error": "Only read-only queries are allowed."}
     try:
@@ -408,7 +448,35 @@ def run_cypher(query):
     out = []
     for r in rows[:50]:
         out.append({k: (str(v)[:400] if not isinstance(v, (int, float, str, type(None), list, dict, bool)) else v) for k, v in r.items()})
-    return {"rows": out, "truncated": len(rows) > 50}
+    res = {"rows": out, "truncated": len(rows) > 50}
+    try:
+        g = _graph_from_rows(rows[:50])
+        if g:
+            res["graph"] = g
+    except Exception:
+        pass
+    return res
+
+
+def treatment_search(treatment, min_bench=None, year_from=None, limit=25):
+    """Judgments that received a given treatment, e.g. 'per incuriam', 'overruled', 'doubted', 'not good law',
+    'partly overruled', 'distinguished'. Returns who applied it, both bench sizes and the paragraph."""
+    t = (treatment or "").lower().strip()
+    rows = ro(f"""MATCH (s:Case)-[e:CITES]->(c:Case)
+                 WHERE toLower(e.treatment) CONTAINS $t
+                   AND ($mb IS NULL OR s.bench_size >= $mb) AND ($yf IS NULL OR s.year >= $yf)
+                 RETURN {CASE_FIELDS}, s.key AS by_key, s.short AS by_name, s.scr AS by_scr, s.date AS by_date,
+                        s.bench_size AS by_bench, e.treatment AS treatment, e.polarity AS polarity, left(e.context, 400) AS context
+                 ORDER BY s.date DESC LIMIT $lim""",
+              {"t": t, "mb": min_bench, "yf": year_from, "lim": int(limit)})
+    ev = Evidence()
+    for r in rows:
+        ev.node(r, role="target")
+        ev.node({"key": r["by_key"], "name": r["by_name"], "scr": r["by_scr"], "bench": r["by_bench"]}, role="negative"
+                if r["polarity"] in NEG else None)
+        ev.edge(r["by_key"], r["key"], r["treatment"], r["polarity"])
+    total = ro("MATCH ()-[e:CITES]->() WHERE toLower(e.treatment) CONTAINS $t RETURN count(e) AS n", {"t": t})[0]["n"]
+    return {"treatment": t, "total_in_corpus": total, "results": rows, "graph": ev.dump()}
 
 
 def stats():
@@ -431,4 +499,5 @@ TOOLS = {
     "landmark_cases": landmark_cases,
     "judge_profile": judge_profile,
     "run_cypher": run_cypher,
+    "treatment_search": treatment_search,
 }

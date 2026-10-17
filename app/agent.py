@@ -38,7 +38,10 @@ TOOL_SPECS = [
      "input_schema": {"type": "object", "properties": {"act": {"type": "string"}, "limit": {"type": "integer", "default": 10}}}},
     {"name": "judge_profile", "description": "A judge's footprint: number of benches, authored judgments, precedents their benches overruled, top Acts, frequent co-judges.",
      "input_schema": {"type": "object", "properties": {"name": {"type": "string"}}, "required": ["name"]}},
-    {"name": "run_cypher", "description": "Run a READ-ONLY openCypher query on FalkorDB for questions the other tools cannot answer (aggregations, custom traversals). Schema:\n" + SCHEMA,
+    {"name": "treatment_search", "description": "Find judgments that received a particular treatment across the corpus: 'per incuriam', 'overruled', 'partly overruled', 'not good law', 'doubted', 'distinguished', etc. Returns the treated case, the judgment that applied the treatment, both bench sizes, dates and the paragraph. Use for questions like 'which judgments were held per incuriam' or 'what did 5-judge benches overrule since 2020'.",
+     "input_schema": {"type": "object", "properties": {"treatment": {"type": "string"}, "min_bench": {"type": "integer", "description": "only treatments applied by benches at least this large"},
+                                                         "year_from": {"type": "integer"}, "limit": {"type": "integer", "default": 25}}, "required": ["treatment"]}},
+    {"name": "run_cypher", "description": "Run a READ-ONLY openCypher query on FalkorDB for questions the other tools cannot answer (aggregations, custom traversals). Always RETURN case keys (e.g. c.key, s.key) and the edge treatment so the UI can draw the result. Schema:\n" + SCHEMA,
      "input_schema": {"type": "object", "properties": {"query": {"type": "string"}}, "required": ["query"]}},
 ]
 

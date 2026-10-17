@@ -94,7 +94,7 @@ Because these treatments are editorial, the citation edges are not LLM guesses.
 
 **Queries.** Every Cypher query and graph algorithm the product depends on is listed, with explanations, in [docs/CYPHER.md](docs/CYPHER.md).
 
-**Agent.** Claude with 9 tools: `search_cases`, `get_case`, `check_good_law`, `citing_cases`, `connection_path`, `cases_on_provision`, `landmark_cases`, `judge_profile`, `run_cypher` (read-only, schema-aware). The UI streams tool calls as they happen. It draws exactly the nodes and edges the agent reasoned over, and stamps the verdict.
+**Agent.** Claude with 10 tools: `search_cases`, `get_case`, `check_good_law`, `citing_cases`, `connection_path`, `cases_on_provision`, `landmark_cases`, `judge_profile`, `treatment_search` (for example, every judgment held *per incuriam*), and `run_cypher` (read-only and schema-aware; its results are drawn as a graph too). The UI streams tool calls as they happen. It draws exactly the nodes and edges the agent reasoned over, and stamps the verdict.
 
 **MCP.** The same tools are served over MCP, so any MCP client can use the graph as its context layer:
 
