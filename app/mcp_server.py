@@ -83,6 +83,19 @@ def judge_profile(name: str) -> dict:
 
 
 @mcp.tool()
+def treatment_search(treatment: str, min_bench: int | None = None, year_from: int | None = None, limit: int = 25) -> dict:
+    """Judgments that received a treatment across the corpus, e.g. 'per incuriam', 'overruled', 'doubted',
+    'not good law', 'partly overruled', with the judgment that applied it and both bench sizes."""
+    return _out(gt.treatment_search(treatment, min_bench, year_from, limit))
+
+
+@mcp.tool()
+def landmark_cases(act: str | None = None, limit: int = 10) -> dict:
+    """Most influential precedents by citation PageRank, overall or under an Act (e.g. 'Arbitration and Conciliation Act')."""
+    return _out(gt.landmark_cases(act, limit))
+
+
+@mcp.tool()
 def run_cypher(query: str) -> dict:
     """Read-only openCypher against the graph. Schema:
     (:Case {key, scr, insc, short, date, year, bench_size, reported, stub, held, keywords, pagerank})
