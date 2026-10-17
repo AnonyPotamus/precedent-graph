@@ -273,7 +273,7 @@ document.addEventListener('click', e => { if (!e.target.closest('.check')) $('#s
 // ---------- agent ----------
 function el(tag, cls, html) { const x = document.createElement(tag); if (cls) x.className = cls; if (html != null) x.innerHTML = html; return x; }
 function label(name, input) {
-  const v = input.case || input.query || input.provision || input.name || input.act || (input.case_a ? `${input.case_a} ↔ ${input.case_b}` : '') || '';
+  const v = input.case || input.query || input.treatment || input.provision || input.name || input.act || (input.case_a ? `${input.case_a} ↔ ${input.case_b}` : '') || '';
   return `<b>${name.replace(/_/g, ' ')}</b> ${String(v).slice(0, 48)}`;
 }
 
