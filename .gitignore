@@ -1,0 +1,9 @@
+.env
+__pycache__/
+*.pyc
+data/*.jsonl
+data/*.parquet
+data/tar/
+work/
+.venv/
+.DS_Store

@@ -1,0 +1,7 @@
+{$DOMAIN} {
+	encode zstd gzip
+	reverse_proxy app:8000 {
+		# stream agent answers (server-sent events) without buffering
+		flush_interval -1
+	}
+}

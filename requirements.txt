@@ -1,0 +1,6 @@
+falkordb>=1.0
+falkordblite>=0.10; sys_platform == "linux"   # embedded FalkorDB (Linux only; on macOS run FalkorDB via Docker)
+anthropic>=0.40
+fastapi>=0.110
+uvicorn[standard]>=0.29
+mcp>=1.9,<2

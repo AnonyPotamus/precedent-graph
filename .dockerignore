@@ -1,0 +1,11 @@
+.git
+.venv
+.env
+deploy
+work
+data/*.jsonl
+data/*.parquet
+data/tar
+data/precedents_compact.json.gz
+**/__pycache__
+**/.DS_Store
