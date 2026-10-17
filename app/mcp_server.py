@@ -8,6 +8,7 @@ import os
 
 from mcp.server.fastmcp import FastMCP
 from mcp.server.transport_security import TransportSecuritySettings
+from mcp.types import ToolAnnotations
 
 from . import graph_tools as gt
 
@@ -20,7 +21,10 @@ for _h in filter(None, [os.getenv("DOMAIN")] + os.getenv("MCP_ALLOWED_HOSTS", ""
 _security = TransportSecuritySettings(
     enable_dns_rebinding_protection=True,
     allowed_hosts=_hosts,
-    allowed_origins=[f"https://{h}" for h in _hosts if "*" not in h] + [f"http://{h}" for h in _hosts if "*" not in h],
+    # browser-based MCP clients send their own Origin; allow the major hosted assistants
+    allowed_origins=[f"https://{h}" for h in _hosts if "*" not in h] + [f"http://{h}" for h in _hosts if "*" not in h]
+    + ["https://chatgpt.com", "https://chat.openai.com", "https://claude.ai"]
+    + [o.strip() for o in os.getenv("MCP_ALLOWED_ORIGINS", "").split(",") if o.strip()],
 )
 
 mcp = FastMCP(
@@ -33,69 +37,72 @@ mcp = FastMCP(
 )
 
 
+READ_ONLY = ToolAnnotations(readOnlyHint=True, destructiveHint=False, idempotentHint=True, openWorldHint=False)
+
+
 def _out(x):
     if isinstance(x, dict):
         x = {k: v for k, v in x.items() if k != "graph"}
     return json.loads(json.dumps(x, default=str))
 
 
-@mcp.tool()
+@mcp.tool(annotations=READ_ONLY)
 def search_cases(query: str, limit: int = 8, year_from: int | None = None, year_to: int | None = None) -> dict:
     """Full-text search over Supreme Court case names, citations, keywords and holdings."""
     return _out(gt.search_cases(query, limit, year_from, year_to))
 
 
-@mcp.tool()
+@mcp.tool(annotations=READ_ONLY)
 def get_case(case: str) -> dict:
     """Details of one case (name, SCR or INSC citation): bench, provisions, holding, and how it treats / is treated by others."""
     return _out(gt.get_case(case))
 
 
-@mcp.tool()
+@mcp.tool(annotations=READ_ONLY)
 def check_good_law(case: str) -> dict:
     """Is this precedent still good law? Multi-hop: negative treatment with bench strength, likely or graph-inferred
     overruling judgment, reliance on overruled authority up to 2 hops, and later reliance after overruling."""
     return _out(gt.check_good_law(case))
 
 
-@mcp.tool()
+@mcp.tool(annotations=READ_ONLY)
 def citing_cases(case: str, polarity: str | None = None, limit: int = 15) -> dict:
     """Later judgments citing a case. polarity: POSITIVE, NEGATIVE, PARTIAL, CAUTION, DISTINGUISHED or NEUTRAL."""
     return _out(gt.citing_cases(case, polarity, limit))
 
 
-@mcp.tool()
+@mcp.tool(annotations=READ_ONLY)
 def connection_path(case_a: str, case_b: str, max_len: int = 6) -> dict:
     """Shortest citation chains between two cases, with the treatment on each hop."""
     return _out(gt.connection_path(case_a, case_b, max_len))
 
 
-@mcp.tool()
+@mcp.tool(annotations=READ_ONLY)
 def cases_on_provision(provision: str, limit: int = 12) -> dict:
     """Most authoritative judgments on a provision, e.g. 'Code of Criminal Procedure s. 482'."""
     return _out(gt.cases_on_provision(provision, limit))
 
 
-@mcp.tool()
+@mcp.tool(annotations=READ_ONLY)
 def judge_profile(name: str) -> dict:
     """A judge's benches, authored judgments, precedents their benches overruled, top Acts and co-judges."""
     return _out(gt.judge_profile(name))
 
 
-@mcp.tool()
+@mcp.tool(annotations=READ_ONLY)
 def treatment_search(treatment: str, min_bench: int | None = None, year_from: int | None = None, limit: int = 25) -> dict:
     """Judgments that received a treatment across the corpus, e.g. 'per incuriam', 'overruled', 'doubted',
     'not good law', 'partly overruled', with the judgment that applied it and both bench sizes."""
     return _out(gt.treatment_search(treatment, min_bench, year_from, limit))
 
 
-@mcp.tool()
+@mcp.tool(annotations=READ_ONLY)
 def landmark_cases(act: str | None = None, limit: int = 10) -> dict:
     """Most influential precedents by citation PageRank, overall or under an Act (e.g. 'Arbitration and Conciliation Act')."""
     return _out(gt.landmark_cases(act, limit))
 
 
-@mcp.tool()
+@mcp.tool(annotations=READ_ONLY)
 def run_cypher(query: str) -> dict:
     """Read-only openCypher against the graph. Schema:
     (:Case {key, scr, insc, short, date, year, bench_size, reported, stub, held, keywords, pagerank})

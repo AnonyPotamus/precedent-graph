@@ -96,7 +96,11 @@ Because these treatments are editorial, the citation edges are not LLM guesses.
 
 **Agent.** Claude with 10 tools: `search_cases`, `get_case`, `check_good_law`, `citing_cases`, `connection_path`, `cases_on_provision`, `landmark_cases`, `judge_profile`, `treatment_search` (for example, every judgment held *per incuriam*), and `run_cypher` (read-only and schema-aware; its results are drawn as a graph too). The UI streams tool calls as they happen. It draws exactly the nodes and edges the agent reasoned over, and stamps the verdict.
 
-**MCP.** The same tools are served over MCP, so any MCP client can use the graph as its context layer:
+**MCP.** The same tools are served over MCP, so any MCP client can use the graph as its context layer. All tools are annotated read-only.
+
+- **Claude Code / Claude Desktop:** see the commands below.
+- **ChatGPT** (plans with Developer Mode): go to Settings → Apps → Advanced settings and turn on **Developer mode**. Click **Create app**, enter the URL `https://precedents.cyruslogic.net/mcp/` and choose **No authentication**. Then in a chat, click **+**, choose Developer mode and select the app.
+
 
 ```bash
 claude mcp add --transport http precedents https://<your-deployment>/mcp/
