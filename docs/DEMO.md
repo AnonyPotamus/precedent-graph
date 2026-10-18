@@ -12,9 +12,11 @@
 ## Scene 1: The problem (0:00–0:25)
 **Screen:** the landing page.
 
-> "In Indian litigation, citing a judgment that's no longer good law can sink an argument. Checking isn't simple. The overruling might be buried in any later judgment, the labels can mislead, and sometimes the overruling itself gets overruled.
+> "When lawyers argue a case in India, they lean on past Supreme Court decisions: 'the court already decided this, so it should decide the same way for us.' But the court can later change its mind and cancel an old decision. Lawyers call that 'overruling'. If you rely on a decision that has been overruled, your argument collapses.
 >
-> Precedent Graph maps how 12,600 Supreme Court judgments from 2010 to 2025 treated each other, using the court's own editorial notes. That's about 63,000 links in a FalkorDB graph. An AI agent uses that graph as its context."
+> Finding out isn't easy. The cancellation could be hidden inside any one of thousands of later judgments. Sometimes a judgment only *reports* that a case was overruled without having the power to do it. And sometimes the cancellation is itself cancelled later.
+>
+> Precedent Graph reads 12,600 Supreme Court judgments from 2010 to 2025 and records how each one treated the earlier decisions it mentioned: followed it, disagreed with it, or cancelled it. That's about 63,000 links, stored as a map in a FalkorDB graph database. An AI assistant then uses that map to answer one question: can I still rely on this decision?"
 
 ---
 

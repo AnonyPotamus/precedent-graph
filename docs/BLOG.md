@@ -93,4 +93,4 @@ The UI streams each tool call and draws exactly the nodes and edges the agent us
 - Vector embeddings of holdings for doctrinal search.
 - A "brief checker" that takes a draft and flags every cited authority with negative treatment.
 
-*Code: [github.com/AnonyPotamus/precedent-graph](https://github.com/AnonyPotamus/precedent-graph) · Live demo: [precedents.cyruslogic.net](https://precedents.cyruslogic.net) · MCP: `https://precedents.cyruslogic.net/mcp/`*
+*Code: [github.com/AnonyPotamus/precedent-graph](https://github.com/AnonyPotamus/precedent-graph) · Live demo: [precedents.cyruslogic.net](https://precedents.cyruslogic.net) · Demo video: [youtu.be/_RRVB81bUJY](https://youtu.be/_RRVB81bUJY) · MCP: `https://precedents.cyruslogic.net/mcp/`*

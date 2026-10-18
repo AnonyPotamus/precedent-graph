@@ -15,7 +15,7 @@ Every answer comes with the evidence chain drawn on screen.
 |---|---|
 | **Live app** | https://precedents.cyruslogic.net |
 | **MCP endpoint** | `https://precedents.cyruslogic.net/mcp/`  run `claude mcp add --transport http precedents https://precedents.cyruslogic.net/mcp/` |
-| **Demo video** | _link to be added_ |
+| **Demo video** | https://youtu.be/_RRVB81bUJY |
 | **Cypher and graph algorithms** | [docs/CYPHER.md](docs/CYPHER.md) |
 | **Hackathon** | Graph Hacks: Context for AI Agents (WeMakeDevs × FalkorDB). **Track 01** (primary) and Track 03 |
 
