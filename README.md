@@ -16,6 +16,7 @@ Every answer comes with the evidence chain drawn on screen.
 | **Live app** | https://precedents.cyruslogic.net |
 | **MCP endpoint** | `https://precedents.cyruslogic.net/mcp/`  run `claude mcp add --transport http precedents https://precedents.cyruslogic.net/mcp/` |
 | **Demo video** | https://youtu.be/_RRVB81bUJY |
+| **Blog post** | [How we built Precedent Graph](https://medium.com/@arnab.saha5/how-we-built-precedent-graph-an-ai-agent-that-checks-whether-indian-supreme-court-precedents-are-8fe39fd43d37) |
 | **Cypher and graph algorithms** | [docs/CYPHER.md](docs/CYPHER.md) |
 | **Hackathon** | Graph Hacks: Context for AI Agents (WeMakeDevs × FalkorDB). **Track 01** (primary) and Track 03 |
 
