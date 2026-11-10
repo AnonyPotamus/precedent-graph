@@ -1,6 +1,6 @@
 # Precedent Graph
 
-[![1st place: WeMakeDevs × FalkorDB Graph Hacks](https://img.shields.io/badge/%F0%9F%8F%86_1st_place-WeMakeDevs_%C3%97_FalkorDB_Graph_Hacks-gold)](https://www.wemakedevs.org/hackathons/falkordb/projects)
+[![Track 01 Winner: WeMakeDevs × FalkorDB Graph Hacks](https://img.shields.io/badge/%F0%9F%8F%86_Track_01_Winner-WeMakeDevs_%C3%97_FalkorDB_Graph_Hacks-gold)](https://www.wemakedevs.org/hackathons/falkordb/projects)
 [![Live demo](https://img.shields.io/badge/live_demo-precedents.cyruslogic.net-0f1b2d)](https://precedents.cyruslogic.net)
 [![MCP server](https://img.shields.io/badge/MCP-remote_server-6b46c1)](#mcp)
 [![Demo video](https://img.shields.io/badge/video-YouTube-red?logo=youtube)](https://youtu.be/_RRVB81bUJY)
@@ -9,7 +9,7 @@
 
 **Is the case you are about to cite still good law?**
 
-> 🏆 **Winner, "Agents That Act on Connected Data" track** at [Graph Hacks: Context for AI Agents](https://www.wemakedevs.org/hackathons/falkordb/projects) (WeMakeDevs × FalkorDB, 2026).
+> 🏆 **Track 01 Winner** ("Agents That Act on Connected Data") at [Graph Hacks: Context for AI Agents](https://www.wemakedevs.org/hackathons/falkordb/projects) (WeMakeDevs × FalkorDB, 2026).
 > If this is useful to you, please ⭐ **star the repo**. It helps other legal-tech and graph developers find it.
 
 Precedent Graph is an AI research agent for Indian Supreme Court case law. Its context layer is a **FalkorDB citation graph** of 12,615 reported judgments (2010–2025) and 62,855 citations. Each citation carries the court editors' own label for how the precedent was treated.
@@ -28,7 +28,7 @@ Every answer comes with the evidence chain drawn on screen.
 | **Demo video** | https://youtu.be/_RRVB81bUJY |
 | **Blog post** | [How we built Precedent Graph](https://medium.com/@arnab.saha5/how-we-built-precedent-graph-an-ai-agent-that-checks-whether-indian-supreme-court-precedents-are-8fe39fd43d37) |
 | **Cypher and graph algorithms** | [docs/CYPHER.md](docs/CYPHER.md) |
-| **Hackathon** | 🏆 **1st place, Track 01** at Graph Hacks: Context for AI Agents (WeMakeDevs × FalkorDB). [Results](https://www.wemakedevs.org/hackathons/falkordb/projects) |
+| **Hackathon** | 🏆 **Track 01 Winner** at Graph Hacks: Context for AI Agents (WeMakeDevs × FalkorDB). [Results](https://www.wemakedevs.org/hackathons/falkordb/projects) |
 
 ![Demo: asking whether SMS Tea Estates is still good law. The evidence graph draws, the NOT GOOD LAW stamp appears, and the agent's answer streams in](docs/img/demo.gif)
 
