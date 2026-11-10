@@ -1,6 +1,16 @@
 # Precedent Graph
 
+[![1st place: WeMakeDevs × FalkorDB Graph Hacks](https://img.shields.io/badge/%F0%9F%8F%86_1st_place-WeMakeDevs_%C3%97_FalkorDB_Graph_Hacks-gold)](https://www.wemakedevs.org/hackathons/falkordb/projects)
+[![Live demo](https://img.shields.io/badge/live_demo-precedents.cyruslogic.net-0f1b2d)](https://precedents.cyruslogic.net)
+[![MCP server](https://img.shields.io/badge/MCP-remote_server-6b46c1)](#mcp)
+[![Demo video](https://img.shields.io/badge/video-YouTube-red?logo=youtube)](https://youtu.be/_RRVB81bUJY)
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
+[![GitHub stars](https://img.shields.io/github/stars/AnonyPotamus/precedent-graph?style=social)](https://github.com/AnonyPotamus/precedent-graph/stargazers)
+
 **Is the case you are about to cite still good law?**
+
+> 🏆 **Winner, "Agents That Act on Connected Data" track** at [Graph Hacks: Context for AI Agents](https://www.wemakedevs.org/hackathons/falkordb/projects) (WeMakeDevs × FalkorDB, 2026).
+> If this is useful to you, please ⭐ **star the repo**. It helps other legal-tech and graph developers find it.
 
 Precedent Graph is an AI research agent for Indian Supreme Court case law. Its context layer is a **FalkorDB citation graph** of 12,615 reported judgments (2010–2025) and 62,855 citations. Each citation carries the court editors' own label for how the precedent was treated.
 
@@ -18,11 +28,11 @@ Every answer comes with the evidence chain drawn on screen.
 | **Demo video** | https://youtu.be/_RRVB81bUJY |
 | **Blog post** | [How we built Precedent Graph](https://medium.com/@arnab.saha5/how-we-built-precedent-graph-an-ai-agent-that-checks-whether-indian-supreme-court-precedents-are-8fe39fd43d37) |
 | **Cypher and graph algorithms** | [docs/CYPHER.md](docs/CYPHER.md) |
-| **Hackathon** | Graph Hacks: Context for AI Agents (WeMakeDevs × FalkorDB). **Track 01** (primary) and Track 03 |
+| **Hackathon** | 🏆 **1st place, Track 01** at Graph Hacks: Context for AI Agents (WeMakeDevs × FalkorDB). [Results](https://www.wemakedevs.org/hackathons/falkordb/projects) |
 
-![The agent answering whether SMS Tea Estates is still good law, with the evidence graph and verdict stamp](docs/img/agent-answer.jpg)
+![Demo: asking whether SMS Tea Estates is still good law. The evidence graph draws, the NOT GOOD LAW stamp appears, and the agent's answer streams in](docs/img/demo.gif)
 
-*Above: the agent's answer, with the tool calls it made, the evidence graph it reasoned over and the verdict.*
+*Above: ask a question in plain English. The agent queries the FalkorDB graph, draws the evidence it reasoned over and stamps the verdict (the wait for the answer is sped up 4×).*
 
 ![Direct case check inferring the overruling judgment for Pune Municipal Corporation](docs/img/inferred-overruling.jpg)
 
@@ -59,7 +69,7 @@ flowchart LR
   M[SCR metadata parquet<br/>1950–2025] --> C
   B --> C[build_graph.py]
   C --> F[(FalkorDB<br/>Case · Judge · Act · Provision<br/>CITES with treatment)]
-  F --> T[graph_tools.py<br/>9 graph tools]
+  F --> T[graph_tools.py<br/>10 graph tools]
   T --> AG[Claude agent<br/>tool use, streamed]
   T --> MCP[MCP server<br/>/mcp + stdio]
   AG --> UI[Web UI<br/>answer + evidence graph + verdict]
@@ -97,6 +107,7 @@ Because these treatments are editorial, the citation edges are not LLM guesses.
 
 **Agent.** Claude with 10 tools: `search_cases`, `get_case`, `check_good_law`, `citing_cases`, `connection_path`, `cases_on_provision`, `landmark_cases`, `judge_profile`, `treatment_search` (for example, every judgment held *per incuriam*), and `run_cypher` (read-only and schema-aware; its results are drawn as a graph too). The UI streams tool calls as they happen. It draws exactly the nodes and edges the agent reasoned over, and stamps the verdict.
 
+<a id="mcp"></a>
 **MCP.** The same tools are served over MCP, so any MCP client can use the graph as its context layer. All tools are annotated read-only.
 
 - **Claude Code / Claude Desktop:** see the commands below.
@@ -124,7 +135,9 @@ uvicorn app.server:app --port 8000      # then open http://localhost:8000
 
 ```bash
 docker run -d -p 6379:6379 -p 3000:3000 falkordb/falkordb:latest   # port 3000 is the FalkorDB Browser
-``` When `FALKORDB_HOST` points at FalkorDB Cloud:
+```
+
+When `FALKORDB_HOST` points at FalkorDB Cloud:
 - the app loads the dump if the graph is missing;
 - it falls back to embedded mode if the cloud instance is unreachable.
 
