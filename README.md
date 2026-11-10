@@ -75,7 +75,7 @@ flowchart LR
   AG --> UI[Web UI<br/>answer + evidence graph + verdict]
 ```
 
-**Data.** The [Indian Supreme Court Judgments](https://registry.opendata.aws/indian-supreme-court-judgments/) open dataset (Dattam Labs, CC-BY-4.0).
+**Data.** The [Indian Supreme Court Judgments](https://registry.opendata.aws/indian-supreme-court-judgments/) open dataset by Pradeep Vanga / Dattam Labs, licensed [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/). See [Data attribution](#data-attribution).
 - Metadata for every reported judgment, 1950–2025.
 - Full-text PDFs for 2010–2025: 12,783 judgments.
 
@@ -182,4 +182,14 @@ for y in $(seq 2010 2025); do curl -f -o data/tar/english-$y.tar \
 
 ## Data attribution
 
-Judgments and metadata: *Indian Supreme Court Judgments*, Dattam Labs, AWS Open Data Registry, [CC-BY-4.0](https://creativecommons.org/licenses/by/4.0/). Source: Supreme Court of India, Digital SCR (scr.sci.gov.in).
+This project uses and adapts **Indian Supreme Court Judgments** by Pradeep Vanga / Dattam Labs ([GitHub](https://github.com/vanga/indian-supreme-court-judgments), [AWS Open Data Registry](https://registry.opendata.aws/indian-supreme-court-judgments/)), licensed under [Creative Commons Attribution 4.0 International (CC BY 4.0)](https://creativecommons.org/licenses/by/4.0/). Original source: Supreme Court of India, Digital SCR ([scr.sci.gov.in](https://scr.sci.gov.in)).
+
+Citation, as requested by the dataset authors:
+
+```
+Vanga (2025). Indian Supreme Court Judgments. [Data set]. AWS Open Data Registry. https://registry.opendata.aws/indian-supreme-court-judgments/
+```
+
+**Changes made.** The judgment PDFs were converted to text and parsed. Bench, statutes, keywords, headnotes, holdings, cited cases and their editorial treatments were extracted. Citations were normalised and matched to judgments, and the result was built into a citation graph with computed scores (PageRank, communities). The graph dumps in [`data/`](data/) are an adaptation of the dataset and are shared under CC BY 4.0 with this attribution. No endorsement by the dataset authors or the Supreme Court of India is implied.
+
+**Licences in this repo.** The source code is MIT-licensed (see [LICENSE](LICENSE)). The graph data in `data/` is CC BY 4.0, as described above.

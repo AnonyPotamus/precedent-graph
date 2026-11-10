@@ -99,6 +99,8 @@ button, input, textarea { font: inherit; color: inherit; }
 
 .legend { display: flex; gap: 16px; flex-wrap: wrap; padding: 10px 20px 12px; border-top: 1px solid var(--ink-2); font-size: 12px; color: var(--on-ink-muted); }
 .legend span::before { content: ""; display: inline-block; width: 18px; height: 3px; margin-right: 6px; vertical-align: middle; background: var(--c); }
+.legend .credit { flex-basis: 100%; font-size: 11px; opacity: .75; }
+.legend .credit a { color: inherit; }
 .legend .inf::before { height: 10px; width: 14px; background: none; border: 2px dashed var(--c); border-radius: 2px; }
 .detail { position: absolute; left: 16px; bottom: 52px; width: min(380px, calc(100% - 32px)); background: #fff; color: #1d2430; border-radius: 8px; padding: 14px 16px; box-shadow: 0 12px 32px rgba(0,0,0,.35); font-size: 13.5px; display: none; z-index: 4; max-height: 50%; overflow-y: auto; }
 .detail h3 { font: 600 15px/1.3 var(--serif); margin: 0 0 4px; }
@@ -157,6 +159,7 @@ button, input, textarea { font: inherit; color: inherit; }
       <span style="--c:#7fd1a5">relied on, followed</span>
       <span style="--c:#8494ab">referred to, distinguished</span>
       <span style="--c:#ff6b5e; --d:dashed" class="inf">overruling inferred from the graph</span>
+      <small class="credit">Data: <a href="https://registry.opendata.aws/indian-supreme-court-judgments/" target="_blank" rel="noopener">Indian Supreme Court Judgments</a> by Pradeep Vanga / Dattam Labs, <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener">CC BY 4.0</a>, adapted into a citation graph. Source: Supreme Court of India. Research aid, not legal advice.</small>
     </div>
   </section>
 </div>
